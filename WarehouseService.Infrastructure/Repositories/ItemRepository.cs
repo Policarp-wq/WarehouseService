@@ -38,6 +38,16 @@ namespace WarehouseService.Infrastructure.Repositories
 
         }
 
+        public async Task<ItemPresentation?> GetById(int itemId)
+        {
+            var res = await _items
+               .AsNoTracking()
+               .SingleOrDefaultAsync(x => x.Id == itemId);
+            if (res == null)
+                return null;
+            return ItemPresentation.FromEntity(res);
+        }
+
         public async Task<IEnumerable<ItemPresentation>> GetItemsByCategory(ItemCategory category)
         {
             return await _items

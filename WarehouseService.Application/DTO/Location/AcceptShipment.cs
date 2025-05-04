@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace WarehouseService.Application.DTO.Location
 {
-    public record AcceptShipment(int ItemId, int EmployeeId);
+    public record AcceptShipment(int ItemId, int EmployeeId, int WarehouseId);
 }

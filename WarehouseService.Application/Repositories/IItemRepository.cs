@@ -13,6 +13,7 @@ namespace WarehouseService.Application.Repositories
     {
         Task<bool> CreateItem(ItemCreateInfo item);
         Task<bool> UpdateWarehouseId(int itemId, int warehouseId);
+        Task<ItemPresentation?> GetById(int itemId);
         Task<IEnumerable<int>> GetItemsFromWarehouse(int warehouseId);
         Task<IEnumerable<ItemPresentation>> GetItemsByCategory(ItemCategory category);
         Task<IEnumerable<ItemPresentation>> GetItemsByCategoryFromWarehouse(ItemCategory category, int warehouseId);

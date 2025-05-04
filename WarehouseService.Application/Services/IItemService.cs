@@ -12,10 +12,9 @@ namespace WarehouseService.Application.Services
     public interface IItemService
     {
         Task<IEnumerable<int>> GetItemsFromWarehouse(int warehouseId);
-        Task<IEnumerable<int>> GetItemsByCategory(ItemCategory category);
-        Task<IEnumerable<int>> GetItemsByCategoryFromWarehouse(ItemCategory category, int warehouseId);
+        Task<IEnumerable<ItemPresentation>> GetItemsByCategory(ItemCategory category);
+        Task<IEnumerable<ItemPresentation>> GetItemsByCategoryFromWarehouse(ItemCategory category, int warehouseId);
         Task<bool> UpdateStatus(int itemId, ItemStatus status);
-        Task<IEnumerable<int>> GetWithNoWarehouse();
         Task<ItemPresentation> GetItemFullInfo(int itemId);
     }
 }

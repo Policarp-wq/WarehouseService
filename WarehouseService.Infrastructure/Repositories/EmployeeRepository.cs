@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WarehouseService.Application.DTO.EmployeeInfo;
+using WarehouseService.Application.DTO.Employees;
 using WarehouseService.Application.Repositories;
 using WarehouseService.Infrastructure.Common;
 using WarehouseService.Infrastructure.Context;
@@ -22,16 +23,16 @@ namespace WarehouseService.Infrastructure.Repositories
             _employees = _dbContext.Employees;
         }
 
-        public async Task<bool> CreateEmployee(EmployeeInfo employee)
+        public async Task<EmployeePresentation> CreateEmployee(EmployeeInfo employee)
         {
-            await _employees.AddAsync(new Employee
+            var res = await _employees.AddAsync(new Employee
             {
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 Position = employee.Position,
                 WarehouseId = employee.WarehouseId,
             });
-            return (await _dbContext.SaveChangesAsync()) > 0;
+            return EmployeePresentation.FromEntity(res.Entity);
         }
 
         public async Task<EmployeeInfo?> GetById(int id)
@@ -53,14 +54,14 @@ namespace WarehouseService.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<int> GetWarehouseOwner(int warehouseId)
+        public async Task<int?> GetWarehouseOwner(int warehouseId)
         {
             var res = await GetWarehouseWorkersByPosition(warehouseId, Position.Owner);
             int cnt = res.Count();
             if (cnt > 1)
                 throw new DatabaseException(Table, $"more than one owner for warehouse {warehouseId}");
             if (cnt == 0)
-                throw new DatabaseException(Table, $"no owners for {warehouseId}");
+                return null;
             return res.First();
         }
 
@@ -82,13 +83,23 @@ namespace WarehouseService.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<bool> UpdateAttachedWarehouse(int employeeId, int warehouseId)
+        public async Task<bool> UpdateAttachedPosition(PositionUpdateInfo info)
         {
-            var res = await _employees.FindAsync(employeeId);
-            if (res == null) throw new NotFoundException(Table, $"No employee for the given id {employeeId}");
-            if(res.WarehouseId == warehouseId)
+            var res = await _employees.FindAsync(info.EmployeeId);
+            if (res == null) throw new NotFoundException(Table, $"No employee for the given id {info.EmployeeId}");
+            if (res.Position == info.Position)
                 return false;
-            res.WarehouseId = warehouseId;
+            res.Position = info.Position;
+            return (await _dbContext.SaveChangesAsync()) > 0;
+        }
+
+        public async Task<bool> UpdateAttachedWarehouse(WarehouseWorkUpdateInfo info)
+        {
+            var res = await _employees.FindAsync(info.EmployeeId);
+            if (res == null) throw new NotFoundException(Table, $"No employee for the given id {info.EmployeeId}");
+            if(res.WarehouseId == info.WarehouseId)
+                return false;
+            res.WarehouseId = info.WarehouseId;
             return (await _dbContext.SaveChangesAsync()) > 0;
         }
     }
