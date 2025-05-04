@@ -45,7 +45,7 @@ namespace WarehouseService.AppHost.Migrations
                         column: x => x.WarehouseId,
                         principalTable: "Warehouses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,7 +58,7 @@ namespace WarehouseService.AppHost.Migrations
                     Length = table.Column<float>(type: "real", nullable: false),
                     Height = table.Column<float>(type: "real", nullable: false),
                     Width = table.Column<float>(type: "real", nullable: false),
-                    WarehouseId = table.Column<int>(type: "integer", nullable: true),
+                    CurrentWarehouseId = table.Column<int>(type: "integer", nullable: false),
                     Category = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -66,10 +66,11 @@ namespace WarehouseService.AppHost.Migrations
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Items_Warehouses_WarehouseId",
-                        column: x => x.WarehouseId,
+                        name: "FK_Items_Warehouses_CurrentWarehouseId",
+                        column: x => x.CurrentWarehouseId,
                         principalTable: "Warehouses",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -78,23 +79,17 @@ namespace WarehouseService.AppHost.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Sector = table.Column<string>(type: "text", nullable: false),
-                    ItemId = table.Column<int>(type: "integer", nullable: false),
-                    WarehouseId = table.Column<int>(type: "integer", nullable: false)
+                    Sector = table.Column<string>(type: "text", nullable: true),
+                    ItemId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ItemsLocations", x => x.Id);
+                    table.UniqueConstraint("AK_ItemsLocations_ItemId", x => x.ItemId);
                     table.ForeignKey(
                         name: "FK_ItemsLocations_Items_ItemId",
                         column: x => x.ItemId,
                         principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ItemsLocations_Warehouses_WarehouseId",
-                        column: x => x.WarehouseId,
-                        principalTable: "Warehouses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -108,7 +103,8 @@ namespace WarehouseService.AppHost.Migrations
                     ItemId = table.Column<int>(type: "integer", nullable: false),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EmployeeId = table.Column<int>(type: "integer", nullable: false),
-                    Action = table.Column<int>(type: "integer", nullable: false)
+                    Action = table.Column<int>(type: "integer", nullable: false),
+                    WarehouseId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -125,25 +121,10 @@ namespace WarehouseService.AppHost.Migrations
                         principalTable: "Items",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ItemStories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ItemId = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    ChangeDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ItemStories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ItemStories_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
+                        name: "FK_ItemsShipments_Warehouses_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "Warehouses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -154,19 +135,9 @@ namespace WarehouseService.AppHost.Migrations
                 column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_WarehouseId",
+                name: "IX_Items_CurrentWarehouseId",
                 table: "Items",
-                column: "WarehouseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemsLocations_ItemId",
-                table: "ItemsLocations",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemsLocations_WarehouseId",
-                table: "ItemsLocations",
-                column: "WarehouseId");
+                column: "CurrentWarehouseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ItemsShipments_EmployeeId",
@@ -179,9 +150,9 @@ namespace WarehouseService.AppHost.Migrations
                 column: "ItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemStories_ItemId",
-                table: "ItemStories",
-                column: "ItemId");
+                name: "IX_ItemsShipments_WarehouseId",
+                table: "ItemsShipments",
+                column: "WarehouseId");
         }
 
         /// <inheritdoc />
@@ -192,9 +163,6 @@ namespace WarehouseService.AppHost.Migrations
 
             migrationBuilder.DropTable(
                 name: "ItemsShipments");
-
-            migrationBuilder.DropTable(
-                name: "ItemStories");
 
             migrationBuilder.DropTable(
                 name: "Employees");

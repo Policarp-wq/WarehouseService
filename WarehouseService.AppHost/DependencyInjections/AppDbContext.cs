@@ -14,7 +14,6 @@ namespace WarehouseService.AppHost.DependencyInjections
         public DbSet<Employee> Employees => Set<Employee>();
         public DbSet<Warehouse> Warehouses => Set<Warehouse>();
         public DbSet<Item> Items => Set<Item>();
-        public DbSet<ItemStory> ItemStories => Set<ItemStory>();
         public DbSet<ItemWarehouseLocation> ItemsLocations => Set<ItemWarehouseLocation>();
         public DbSet<WarehouseShipment> ItemsShipments => Set<WarehouseShipment>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)

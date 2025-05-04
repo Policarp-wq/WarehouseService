@@ -8,7 +8,7 @@ using WarehouseSevice.Domain.Enums;
 
 namespace WarehouseService.Application.Repositories
 {
-    public interface IWarehouseShipment
+    public interface IWarehouseShipmentRepository
     {
         Task<bool> CreateShipment(WarehouseShipment shipment);
         Task<IEnumerable<WarehouseShipment>> GetEmployeesShipments(int employeeId);

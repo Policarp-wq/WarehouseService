@@ -16,5 +16,6 @@ namespace WarehouseService.Application.Repositories
         Task<IEnumerable<Item>> GetItemsByCategory(ItemCategory category);
         Task<IEnumerable<Item>> GetItemsByCategoryFromWarehouse(ItemCategory category, int warehouseId);
         Task<bool> UpdateStatus(int itemId, ItemStatus status);
+        Task<IEnumerable<Item>> GetWithNoWarehouse();
     }
 }

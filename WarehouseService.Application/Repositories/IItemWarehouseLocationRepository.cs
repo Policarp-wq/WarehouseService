@@ -7,10 +7,11 @@ using WarehouseSevice.Domain.Entities;
 
 namespace WarehouseService.Application.Repositories
 {
-    public interface IItemWarehouseLocation
+    public interface IItemWarehouseLocationRepository
     {
         Task<bool> ChangeItemLocation(ItemWarehouseLocation itemWarehouseLocation);
         Task<ItemWarehouseLocation> GetItemLocation(int itemId);
-        Task<IEnumerable<Item>> GetWarehouseItemsLocations(int warehouseId);
+        Task<IEnumerable<ItemWarehouseLocation>> GetWarehouseItemsLocations(int warehouseId);
+        Task<IEnumerable<int>> GetNotAllocated(int warehouseId);
     }
 }

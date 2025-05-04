@@ -62,6 +62,9 @@ namespace WarehouseService.AppHost.Migrations
                     b.Property<int>("Category")
                         .HasColumnType("integer");
 
+                    b.Property<int>("CurrentWarehouseId")
+                        .HasColumnType("integer");
+
                     b.Property<float>("Height")
                         .HasColumnType("real");
 
@@ -75,41 +78,14 @@ namespace WarehouseService.AppHost.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("WarehouseId")
-                        .HasColumnType("integer");
-
                     b.Property<float>("Width")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WarehouseId");
+                    b.HasIndex("CurrentWarehouseId");
 
                     b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("WarehouseSevice.Domain.Entities.ItemStory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("ChangeDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("ItemStories");
                 });
 
             modelBuilder.Entity("WarehouseSevice.Domain.Entities.ItemWarehouseLocation", b =>
@@ -124,17 +100,11 @@ namespace WarehouseService.AppHost.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Sector")
-                        .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("WarehouseId")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("WarehouseId");
+                    b.HasAlternateKey("ItemId");
 
                     b.ToTable("ItemsLocations");
                 });
@@ -179,11 +149,16 @@ namespace WarehouseService.AppHost.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("ItemId");
+
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("ItemsShipments");
                 });
@@ -193,7 +168,7 @@ namespace WarehouseService.AppHost.Migrations
                     b.HasOne("WarehouseSevice.Domain.Entities.Warehouse", "Warehouse")
                         .WithMany("Employees")
                         .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Warehouse");
@@ -201,41 +176,24 @@ namespace WarehouseService.AppHost.Migrations
 
             modelBuilder.Entity("WarehouseSevice.Domain.Entities.Item", b =>
                 {
-                    b.HasOne("WarehouseSevice.Domain.Entities.Warehouse", "Warehouse")
+                    b.HasOne("WarehouseSevice.Domain.Entities.Warehouse", "CurrentWarehouse")
                         .WithMany("Items")
-                        .HasForeignKey("WarehouseId");
-
-                    b.Navigation("Warehouse");
-                });
-
-            modelBuilder.Entity("WarehouseSevice.Domain.Entities.ItemStory", b =>
-                {
-                    b.HasOne("WarehouseSevice.Domain.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("CurrentWarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Item");
+                    b.Navigation("CurrentWarehouse");
                 });
 
             modelBuilder.Entity("WarehouseSevice.Domain.Entities.ItemWarehouseLocation", b =>
                 {
                     b.HasOne("WarehouseSevice.Domain.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WarehouseSevice.Domain.Entities.Warehouse", "Warehouse")
-                        .WithMany()
-                        .HasForeignKey("WarehouseId")
+                        .WithOne()
+                        .HasForeignKey("WarehouseSevice.Domain.Entities.ItemWarehouseLocation", "ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Item");
-
-                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("WarehouseSevice.Domain.Entities.WarehouseShipment", b =>
@@ -252,9 +210,17 @@ namespace WarehouseService.AppHost.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("WarehouseSevice.Domain.Entities.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Employee");
 
                     b.Navigation("Item");
+
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("WarehouseSevice.Domain.Entities.Warehouse", b =>

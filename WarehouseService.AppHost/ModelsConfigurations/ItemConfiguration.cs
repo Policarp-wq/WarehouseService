@@ -8,7 +8,6 @@ namespace WarehouseService.AppHost.ModelsConfigurations
     {
         public void Configure(EntityTypeBuilder<Item> builder)
         {
-            builder.HasOne(i => i.Warehouse).WithMany(w => w.Items);
 
         }
     }
