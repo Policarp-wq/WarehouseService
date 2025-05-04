@@ -13,7 +13,7 @@ namespace WarehouseSevice.Domain.Entities
         public string Address { get; set; } = null!;
         //public int OwnerId { get; set; }
         //public Employee Owner { get; set; } = null!;
-        public ICollection<Employee> Employees = [];
-        public ICollection<Item> Items = [];
+        public virtual ICollection<Employee> Employees { get; set; } = [];
+        public virtual ICollection<Item> Items { get; set; } = [];
     }
 }

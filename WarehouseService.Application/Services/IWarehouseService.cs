@@ -18,5 +18,6 @@ namespace WarehouseService.Application.Services
         Task<bool> AllocateItem(int itemId, string sector);
         Task<long> GetFullness(int warehouseId);
         Task<bool> SetItemSector(ItemSectorInfo sectorinfo);
+        Task<WarehousePresentation> GetById(int id);
     }
 }

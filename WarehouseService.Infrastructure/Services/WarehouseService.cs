@@ -65,6 +65,7 @@ namespace WarehouseService.Infrastructure.Services
             {
                 await _itemRepository.CreateItem(createInfo);
                 await _storage.AcceptItem(createInfo.WarehouseId);
+                return true;
             }
             throw new WarehouseOverflowException(createInfo.WarehouseId);
         }
@@ -130,6 +131,11 @@ namespace WarehouseService.Infrastructure.Services
         public async Task<bool> SetItemSector(ItemSectorInfo sectorInfo)
         {
             return await _locationRepository.ChangeItemLocation(sectorInfo.ItemId, sectorInfo.Sector);
+        }
+
+        public async Task<WarehousePresentation> GetById(int id)
+        {
+            return await _warehouseRepository.GetById(id);
         }
     }
 }

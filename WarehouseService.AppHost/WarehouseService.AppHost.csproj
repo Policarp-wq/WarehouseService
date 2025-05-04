@@ -29,8 +29,5 @@
     <ProjectReference Include="..\WarehouseService.Infrastructure\WarehouseService.Infrastructure.csproj" />
     <ProjectReference Include="..\WarehouseSevice.Domain\WarehouseSevice.Domain.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Middleware\Endpoints\" />
-  </ItemGroup>
 
 </Project>

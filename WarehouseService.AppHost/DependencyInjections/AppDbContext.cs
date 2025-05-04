@@ -9,7 +9,7 @@ namespace WarehouseService.AppHost.DependencyInjections
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
         {
-            Database.EnsureCreated();
+            //Database.EnsureDeleted();
         }   
         public DbSet<Employee> Employees => Set<Employee>();
         public DbSet<Warehouse> Warehouses => Set<Warehouse>();
@@ -17,9 +17,9 @@ namespace WarehouseService.AppHost.DependencyInjections
         public DbSet<ItemWarehouseLocation> ItemsLocations => Set<ItemWarehouseLocation>();
         public DbSet<WarehouseShipment> ItemsShipments => Set<WarehouseShipment>();
 
-        public Task<int> SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
         {
-            return SaveChangesAsync();
+            return await base.SaveChangesAsync();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WarehouseService.AppHost.DependencyInjections;
 using WarehouseService.AppHost.Middleware;
+using WarehouseService.AppHost.Middleware.Endpoints;
 using WarehouseService.Infrastructure.Context;
 using WarehouseSevice.Domain.Exceptions;
 
@@ -26,13 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/weatherforecast", (IDbContext context) =>
-{
-    throw new LogicException("dsd");
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
+app.MapCustomEndpoints();
 app.Run();
 
 internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
