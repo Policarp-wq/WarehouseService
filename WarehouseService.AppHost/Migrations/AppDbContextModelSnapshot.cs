@@ -22,7 +22,7 @@ namespace WarehouseService.AppHost.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("WarehouseSevice.Domain.Entities.Employee", b =>
+            modelBuilder.Entity("WarehouseSevice.Domain.Entities.EmployeeInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace WarehouseService.AppHost.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("WarehouseSevice.Domain.Entities.Item", b =>
+            modelBuilder.Entity("WarehouseSevice.Domain.Entities.ItemPresentation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -109,7 +109,7 @@ namespace WarehouseService.AppHost.Migrations
                     b.ToTable("ItemsLocations");
                 });
 
-            modelBuilder.Entity("WarehouseSevice.Domain.Entities.Warehouse", b =>
+            modelBuilder.Entity("WarehouseSevice.Domain.Entities.WarehouseInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -163,20 +163,20 @@ namespace WarehouseService.AppHost.Migrations
                     b.ToTable("ItemsShipments");
                 });
 
-            modelBuilder.Entity("WarehouseSevice.Domain.Entities.Employee", b =>
+            modelBuilder.Entity("WarehouseSevice.Domain.Entities.EmployeeInfo", b =>
                 {
-                    b.HasOne("WarehouseSevice.Domain.Entities.Warehouse", "Warehouse")
+                    b.HasOne("WarehouseSevice.Domain.Entities.WarehouseInfo", "WarehouseInfo")
                         .WithMany("Employees")
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Warehouse");
+                    b.Navigation("WarehouseInfo");
                 });
 
-            modelBuilder.Entity("WarehouseSevice.Domain.Entities.Item", b =>
+            modelBuilder.Entity("WarehouseSevice.Domain.Entities.ItemPresentation", b =>
                 {
-                    b.HasOne("WarehouseSevice.Domain.Entities.Warehouse", "CurrentWarehouse")
+                    b.HasOne("WarehouseSevice.Domain.Entities.WarehouseInfo", "CurrentWarehouse")
                         .WithMany("Items")
                         .HasForeignKey("CurrentWarehouseId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -187,43 +187,43 @@ namespace WarehouseService.AppHost.Migrations
 
             modelBuilder.Entity("WarehouseSevice.Domain.Entities.ItemWarehouseLocation", b =>
                 {
-                    b.HasOne("WarehouseSevice.Domain.Entities.Item", "Item")
+                    b.HasOne("WarehouseSevice.Domain.Entities.ItemPresentation", "ItemPresentation")
                         .WithOne()
                         .HasForeignKey("WarehouseSevice.Domain.Entities.ItemWarehouseLocation", "ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Item");
+                    b.Navigation("ItemPresentation");
                 });
 
             modelBuilder.Entity("WarehouseSevice.Domain.Entities.WarehouseShipment", b =>
                 {
-                    b.HasOne("WarehouseSevice.Domain.Entities.Employee", "Employee")
+                    b.HasOne("WarehouseSevice.Domain.Entities.EmployeeInfo", "EmployeeInfo")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WarehouseSevice.Domain.Entities.Item", "Item")
+                    b.HasOne("WarehouseSevice.Domain.Entities.ItemPresentation", "ItemPresentation")
                         .WithMany()
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WarehouseSevice.Domain.Entities.Warehouse", "Warehouse")
+                    b.HasOne("WarehouseSevice.Domain.Entities.WarehouseInfo", "WarehouseInfo")
                         .WithMany()
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Employee");
+                    b.Navigation("EmployeeInfo");
 
-                    b.Navigation("Item");
+                    b.Navigation("ItemPresentation");
 
-                    b.Navigation("Warehouse");
+                    b.Navigation("WarehouseInfo");
                 });
 
-            modelBuilder.Entity("WarehouseSevice.Domain.Entities.Warehouse", b =>
+            modelBuilder.Entity("WarehouseSevice.Domain.Entities.WarehouseInfo", b =>
                 {
                     b.Navigation("Employees");
 

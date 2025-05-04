@@ -11,6 +11,7 @@ namespace WarehouseService.Infrastructure.Context
         public DbSet<ItemWarehouseLocation> ItemsLocations { get; }
         public DbSet<WarehouseShipment> ItemsShipments { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        Task<int> SaveChangesAsync();
     }
 }
 

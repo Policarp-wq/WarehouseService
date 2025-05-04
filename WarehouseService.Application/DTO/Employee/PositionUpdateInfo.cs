@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WarehouseSevice.Domain.Enums;
 
-namespace WarehouseService.Application.DTO.Employee
+namespace WarehouseService.Application.DTO.EmployeeInfo
 {
     public record PositionUpdateInfo(int EmployeeId, Position Position)
     {

@@ -9,7 +9,7 @@ namespace WarehouseService.Application.Repositories
 {
     public interface IItemWarehouseLocationRepository
     {
-        Task<bool> ChangeItemLocation(ItemWarehouseLocation itemWarehouseLocation);
+        Task<bool> ChangeItemLocation(int itemId, string section);
         Task<ItemWarehouseLocation> GetItemLocation(int itemId);
         Task<IEnumerable<ItemWarehouseLocation>> GetWarehouseItemsLocations(int warehouseId);
         Task<IEnumerable<int>> GetNotAllocated(int warehouseId);

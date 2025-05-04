@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WarehouseSevice.Domain.Entities;
 using WarehouseSevice.Domain.Enums;
 
-namespace WarehouseService.Application.DTO.Item
+namespace WarehouseService.Application.DTO.ItemPresentation
 {
     public record ItemCreateInfo(string Name, ItemSize Size, int WarehouseId, ItemCategory Category)
     {

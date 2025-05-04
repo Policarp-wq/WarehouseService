@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WarehouseService.Application\WarehouseService.Application.csproj" />
     <ProjectReference Include="..\WarehouseSevice.Domain\WarehouseSevice.Domain.csproj" />
   </ItemGroup>
 

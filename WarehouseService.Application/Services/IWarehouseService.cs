@@ -1,6 +1,6 @@
-﻿using WarehouseService.Application.DTO.Item;
+﻿using WarehouseService.Application.DTO.ItemPresentation;
 using WarehouseService.Application.DTO.Location;
-using WarehouseService.Application.DTO.Warehouse;
+using WarehouseService.Application.DTO.WarehousePresentation;
 using WarehouseSevice.Domain.Entities;
 
 namespace WarehouseService.Application.Services
@@ -16,6 +16,6 @@ namespace WarehouseService.Application.Services
         Task<bool> ReleaseItem(ReleaseShipment shipment);
         Task<bool> AllocateItem(int itemId, string sector);
         Task<int> GetSpaceLeft(int warehouseId);
-        Task<bool> SetItemSector(ItemSectorinfo sectorinfo);
+        Task<bool> SetItemSector(ItemSectorInfo sectorinfo);
     }
 }

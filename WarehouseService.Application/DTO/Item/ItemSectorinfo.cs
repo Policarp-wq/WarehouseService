@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WarehouseService.Application.DTO.Item
+namespace WarehouseService.Application.DTO.ItemPresentation
 {
-    public record ItemSectorinfo(int ItemId, string Sector)
+    public record ItemSectorInfo(int ItemId, string Sector)
     {
     }
 }
