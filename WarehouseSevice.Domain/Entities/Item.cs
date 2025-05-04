@@ -15,7 +15,7 @@ namespace WarehouseSevice.Domain.Entities
         public float Height { get; set; }
         public float Width { get; set; }
         public int? WarehouseId { get; set; }
-        public Warehouse Warehouse { get; set; }
+        public Warehouse Warehouse { get; set; } = null!;
         public ItemCategory Category { get; set; }
         public ItemStatus Status { get; set; }
     }

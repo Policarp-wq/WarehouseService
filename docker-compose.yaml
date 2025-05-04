@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:17.4
+    restart: always
+    shm_size: 128mb
+    env_file:
+      - ./db.env
+    ports:
+      - 5432:5432
+    user: root
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=sans@mail.ru
+      - PGADMIN_DEFAULT_PASSWORD=eptaphone332??
+      - PGADMIN_DISABLE_POSTFIX=nope
+    ports:
+      - 8080:80

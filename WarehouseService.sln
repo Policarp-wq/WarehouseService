@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35506.116 d17.12
+VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseService.AppHost", "WarehouseService.AppHost\WarehouseService.AppHost.csproj", "{2B0C716D-B1A3-4188-A386-444C1F8FF10B}"
 EndProject
@@ -12,6 +12,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseService.Infrastructure", "WarehouseService.Infrastructure\WarehouseService.Infrastructure.csproj", "{9DB2FE3F-FF1D-45F1-905C-B5FF5B23B18A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseService.Application", "WarehouseService.Application\WarehouseService.Application.csproj", "{20423526-9685-4CB7-9FFC-8A3C5C07A683}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{8BFE3820-D11D-470E-B517-A3D72FA06564}"
+	ProjectSection(SolutionItems) = preProject
+		db.env = db.env
+		docker-compose.yaml = docker-compose.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
