@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using StackExchange.Redis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,16 +24,22 @@ namespace WarehouseService.Infrastructure.Services
         private readonly IItemRepository _itemRepository;
         private readonly IItemWarehouseLocationRepository _locationRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IWarehouseStorageService _storage;
+        private readonly IDatabase _database;
 
         public WarehouseService(IWarehouseRepository warehouseRepository,
             IItemRepository itemRepository,
             IItemWarehouseLocationRepository locationRepository,
-            IEmployeeRepository employeeRepository)
+            IEmployeeRepository employeeRepository,
+            IWarehouseStorageService storage,
+            IConnectionMultiplexer multiplexer)
         {
             _warehouseRepository = warehouseRepository;
             _itemRepository = itemRepository;
             _locationRepository = locationRepository;
             _employeeRepository = employeeRepository;
+            _storage = storage;
+            _database = multiplexer.GetDatabase();
         }
 
         public async Task<bool> AcceptItem(AcceptShipment shipment)
@@ -39,7 +47,7 @@ namespace WarehouseService.Infrastructure.Services
             if (await IsAvailableToAccept(shipment.WarehouseId))
             {
                 await _itemRepository.UpdateWarehouseId(shipment.ItemId, shipment.WarehouseId);
-                //--cnt;
+                await _storage.AcceptItem(shipment.WarehouseId);
                 return true;
             }
             throw new WarehouseOverflowException(shipment.WarehouseId);
@@ -54,7 +62,10 @@ namespace WarehouseService.Infrastructure.Services
         public async Task<bool> CreateItem(ItemCreateInfo createInfo)
         {
             if(await IsAvailableToAccept(createInfo.WarehouseId))
-                return await _itemRepository.CreateItem(createInfo);
+            {
+                await _itemRepository.CreateItem(createInfo);
+                await _storage.AcceptItem(createInfo.WarehouseId);
+            }
             throw new WarehouseOverflowException(createInfo.WarehouseId);
         }
 
@@ -78,24 +89,40 @@ namespace WarehouseService.Infrastructure.Services
         private async Task<bool> IsAvailableToAccept(int warehouseId)
         {
             //cache
-            var res = await _warehouseRepository.GetById(warehouseId);
-            if(res == null)
+            var capacity = await _database.StringGetAsync(GetCapacityTag(warehouseId));
+            if (capacity.HasValue)
+            {
+                return await GetFullness(warehouseId) < ((long)capacity);
+            }
+            var warehouse = await _warehouseRepository.GetById(warehouseId);
+            if (warehouse == null)
                 return false;
-            return await GetFullness(res.WarehouseId) < res.Capacity;
+            await _database.StringSetAsync(GetCapacityTag(warehouseId), capacity);
+            return await GetFullness(warehouse.WarehouseId) < warehouse.Capacity;
         }
 
-        public Task<int> GetFullness(int warehouseId)
+        private static string GetCapacityTag(int warehouseId)
         {
-            throw new NotImplementedException();
+            return $"capacity:{warehouseId}";
+        }
+
+        public async Task<long> GetFullness(int warehouseId)
+        {
+            return await _storage.GetFullness(warehouseId);
         }
 
         public async Task<bool> ReleaseItem(ReleaseShipment shipment)
         {
+            var item = await _itemRepository.GetById(shipment.ItemId);
+            if (item == null)
+                return false;
             //transaction?
-            if(await IsAvailableToAccept(shipment.DestinationWarehouseId))
+            if (await IsAvailableToAccept(shipment.DestinationWarehouseId))
             {
                 await _itemRepository.UpdateWarehouseId(shipment.ItemId, shipment.DestinationWarehouseId);
-                //++cnt
+                await _storage.ReleaseItem(item.WarehouseId);
+                await _storage.AcceptItem(shipment.DestinationWarehouseId);
+                return true;
             }
             throw new WarehouseOverflowException(shipment.DestinationWarehouseId);
         }

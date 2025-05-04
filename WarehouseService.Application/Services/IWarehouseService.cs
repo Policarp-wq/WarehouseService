@@ -16,7 +16,7 @@ namespace WarehouseService.Application.Services
         Task<bool> AcceptItem(AcceptShipment shipment);
         Task<bool> ReleaseItem(ReleaseShipment shipment);
         Task<bool> AllocateItem(int itemId, string sector);
-        Task<int> GetFullness(int warehouseId);
+        Task<long> GetFullness(int warehouseId);
         Task<bool> SetItemSector(ItemSectorInfo sectorinfo);
     }
 }
