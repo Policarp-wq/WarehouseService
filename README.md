@@ -15,7 +15,7 @@
 - **Redis** — кеширование вместимости складов.
 - **EF Core** — ORM для работы с данными.
 
-Также реализован хглобальный обработчик ошибокъ(https://github.com/Policarp-wq/WarehouseService/blob/master/WarehouseService.AppHost/Middleware/GlobalExceptionHandler.cs)
+Также реализован [глобальный обработчик ошибок](https://github.com/Policarp-wq/WarehouseService/blob/master/WarehouseService.AppHost/Middleware/GlobalExceptionHandler.cs)
 
 ## [Сущности](https://github.com/Policarp-wq/WarehouseService/tree/master/WarehouseSevice.Domain/Entities)
 - Warehouse
