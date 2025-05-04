@@ -9,7 +9,7 @@ using WarehouseSevice.Domain.Exceptions;
 
 namespace WarehouseService.Infrastructure.Services
 {
-    internal class WarehouseStorageService : IWarehouseStorageService
+    public class WarehouseStorageService : IWarehouseStorageService
     {
         private readonly IDatabase _database;
         public WarehouseStorageService(IConnectionMultiplexer multiplexer)

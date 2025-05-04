@@ -1,23 +1,25 @@
 using Microsoft.EntityFrameworkCore;
 using WarehouseService.AppHost.DependencyInjections;
+using WarehouseService.AppHost.Middleware;
 using WarehouseService.Infrastructure.Context;
+using WarehouseSevice.Domain.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<AppDbContext>(opt =>
-{
-    opt.UseNpgsql("Host=localhost;Port=5432;Username=mock;Password=mock");
-});
-builder.Services.AddScoped<IDbContext, AppDbContext>();
+builder.Services.AddDbInjection();
+builder.Services.AddReposInjection();
+builder.Services.AddServicesInjection();
+builder.Services.AddRedisInjection();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseExceptionHandler();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -26,7 +28,7 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/weatherforecast", (IDbContext context) =>
 {
-   return context.Items;
+    throw new LogicException("dsd");
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();

@@ -16,3 +16,8 @@ services:
       - PGADMIN_DISABLE_POSTFIX=nope
     ports:
       - 8080:80
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379

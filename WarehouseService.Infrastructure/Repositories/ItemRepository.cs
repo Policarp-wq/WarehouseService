@@ -17,7 +17,7 @@ namespace WarehouseService.Infrastructure.Repositories
     public class ItemRepository : BaseRepository, IItemRepository
     {
         private readonly DbSet<Item> _items;    
-        protected ItemRepository(IDbContext dbContext) : base(dbContext, "Items")
+        public ItemRepository(IDbContext dbContext) : base(dbContext, "Items")
         {
             _items = dbContext.Items;
         }
