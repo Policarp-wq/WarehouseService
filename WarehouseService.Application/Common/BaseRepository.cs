@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WarehouseService.Infrastructure.Context;
+using WarehouseSevice.Domain.Entities;
 
 namespace WarehouseService.Application.Common
 {

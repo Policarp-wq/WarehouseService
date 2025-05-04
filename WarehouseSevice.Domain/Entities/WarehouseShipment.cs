@@ -16,6 +16,8 @@ namespace WarehouseSevice.Domain.Entities
         public int EmployeeId { get; set; }
         public Employee Employee { get; set; } = null!;
         public ShipmentAction Action { get; set; }
+        public int WarehouseId { get; set; }
+        public Warehouse Warehouse { get; set; } = null!;
 
     }
 }
